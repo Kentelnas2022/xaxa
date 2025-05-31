@@ -1,0 +1,235 @@
+.profile-page-container {
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background: #ffffff;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  background-color: #1f324a;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header.edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.page-title {
+  margin: 0;
+  flex-grow: 1;
+  text-align: center;
+}
+
+/* Main Content Centered */
+.profile-main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 5rem;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.profile-picture-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.profile-picture-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #1f324a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.profile-picture-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.profile-picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Name & Role */
+.profile-name-bio {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.full-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f324a;
+}
+
+.user-role {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Option Items */
+.option-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.option-item:hover {
+  background-color: #f4f4f4;
+}
+
+.option-left {
+  display: flex;
+  align-items: center;
+}
+
+.option-icon {
+  color: #1f324a;
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+}
+
+.option-arrow {
+  color: #ccc;
+  font-size: 1rem;
+}
+
+/* Sign Out Button */
+.sign-out-btn {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #1f324a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sign-out-btn:hover {
+  background-color: #0d1e2a;
+  transform: scale(1.02);
+}
+
+/* Edit Form */
+.edit-form {
+  background: white;
+  padding: 2rem;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  margin-top: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #1f324a;
+  box-shadow: 0 0 0 3px rgba(31, 50, 74, 0.15);
+  outline: none;
+}
+
+.save-changes-btn {
+  width: 100%;
+  padding: 1rem;
+  background-color: #1f324a;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-changes-btn:hover {
+  background-color: #0e1e30;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .profile-picture-wrapper {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-picture {
+    width: 100%;
+    height: 100%;
+  }
+
+  .full-name {
+    font-size: 1.5rem;
+  }
+
+  .option-item {
+    padding: 1rem 0.8rem;
+  }
+}
