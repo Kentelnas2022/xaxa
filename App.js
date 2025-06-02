@@ -10,6 +10,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LayoutNav from './components/LayoutNav';
 import Location from './components/Location'; 
 import Settings from './components/Settings';
+import SplashScreen from './components/SplashScreen';
+
 import './App.css';
 
 
@@ -22,7 +24,16 @@ function App() {
         <Route path="/layoutnav" element={<LayoutNav />} />
         <Route path="/loading" element={<Loading />} />
 
-       
+        <Route
+          path="/splashscreen"
+          element={
+            <ProtectedRoute>
+              <SplashScreen />
+            </ProtectedRoute>
+          }
+        />
+
+
         <Route
           path="/dashboard"
           element={
