@@ -5,13 +5,13 @@ import './css/Dashboard.css';
 const Dashboard = () => {
   const navigate = useNavigate();
   const [helmetImage, setHelmetImage] = useState(null);
+  const [showEmergency, setShowEmergency] = useState(false);
+  const [showCrashMessage, setShowCrashMessage] = useState(false);
+  const [countdown, setCountdown] = useState(15);
 
   useEffect(() => {
-    // Fetch image from localStorage (adjust key as needed)
     const imageData = localStorage.getItem('helmetImage');
-    if (imageData) {
-      setHelmetImage(imageData);
-    }
+    if (imageData) setHelmetImage(imageData);
 
     const navItems = document.querySelectorAll('.nav-item');
     const highlight = document.querySelector('.nav-highlight');
@@ -21,7 +21,7 @@ const Dashboard = () => {
       if (index === 0) {
         item.classList.add('active');
         if (highlight) {
-          highlight.style.left = `calc(${index * 33.33}% + 16.66% - 30px)`;
+          highlight.style.left = `calc(${index * 33.33}% + 16.66% - 30px)`; // ✅ fixed calc string
         }
       }
 
@@ -33,32 +33,67 @@ const Dashboard = () => {
     });
 
     return () => {
-      navItems.forEach((item, index) => {
-        item.removeEventListener('click', () => {
-          if (index === 1) navigate('/emergency');
-          else if (index === 2) navigate('/profile');
-        });
+      navItems.forEach((item) => {
+        item.onclick = null; 
       });
     };
   }, [navigate]);
 
+  useEffect(() => {
+    const crashTimer = setTimeout(() => {
+      setShowEmergency(true);
+      window.navigator.vibrate?.(500);
+
+      setTimeout(() => setShowCrashMessage(true), 3000);
+    }, 10000);
+
+    return () => clearTimeout(crashTimer);
+  }, []);
+
+  useEffect(() => {
+    let countdownTimer;
+    if (showCrashMessage) {
+      countdownTimer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownTimer);
+            navigate('/responder');
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(countdownTimer);
+  }, [showCrashMessage, navigate]);
+
+  const cancelAlert = () => {
+    setShowEmergency(false);
+    setShowCrashMessage(false);
+    setCountdown(15);
+  };
+
   return (
     <div>
       <div className="header-status-card">
-        <h2 className='text-section'>Dashboard</h2>
+        <h2 className="text-section">Dashboard</h2>
       </div>
 
       <main className="main-content">
-        <div className="helmet-status-card">
-          <h2>Rider Status:</h2>
-          <i className="fas fa-hard-hat hat-icon"></i>
-          <p className="status-text">Safe condition</p>
-          {helmetImage && (
-            <div className="helmet-image-container">
-              <img src={helmetImage} alt="Helmet" className="helmet-image" />
-            </div>
-          )}
-        </div>
+      <div className="helmet-status-card">
+  <h2>Helmet Status</h2>
+  <div className="helmet-status-content">
+    <i className="fas fa-hard-hat hat-icon"></i>
+    <p className="status-text">Connected</p>
+  </div>
+  {helmetImage && (
+    <div className="helmet-image-container">
+      <img src={helmetImage} alt="Helmet" className="helmet-image" />
+    </div>
+  )}
+</div>
+
 
         <div className="button-card">
           <button className="nav-button" onClick={() => navigate('/location')}>
@@ -89,6 +124,26 @@ const Dashboard = () => {
           <div className="nav-highlight"></div>
         </ul>
       </nav>
+
+      {showEmergency && (
+        <div className="crash-animation active">
+          <div className="crash-pulse"></div>
+
+          {showCrashMessage && (
+            <div className="crash-message-box">
+              <h2>Crash Detected!</h2>
+              <p>
+                Cancel alert if you’re safe.<br />
+                Emergency responders will be notified automatically.
+              </p>
+              <div className="crash-timer">{countdown}s</div>
+              <button className="cancel-alert-button" onClick={cancelAlert}>
+                Cancel Alert
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
