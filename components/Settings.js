@@ -113,8 +113,8 @@ const Settings = () => {
       <header className="settings-header">
         <button className="back-button" onClick={() => navigate('/profile')}>
           <FontAwesomeIcon icon={faArrowLeft} />
-        </button>
-        <h1 className="settings-title">Settings</h1>
+        </button><span>
+        <h1 className="settings-title">Settings</h1></span>
       </header>
 
       <div className="settings-container">
