@@ -110,12 +110,13 @@ const Settings = () => {
 
   return (
     <div className="settings-page">
-      <header className="settings-header">
-        <button className="back-button" onClick={() => navigate('/profile')}>
-          <FontAwesomeIcon icon={faArrowLeft} />
-        </button><span>
-        <h1 className="settings-title">Settings</h1></span>
-      </header>
+     <header className="settings-header">
+  <button className="back-button" onClick={() => navigate('/profile')}>
+    <FontAwesomeIcon icon={faArrowLeft} />
+  </button>
+  <h1 className="settings-title">Settings</h1>
+</header>
+
 
       <div className="settings-container">
         <div className="setting-item" onClick={handleLocationPermission}>
