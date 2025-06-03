@@ -8,7 +8,6 @@
   overflow-x: hidden;
 }
 
-/* Header */
 .header {
   background-color: #1f324a;
   color: white;
@@ -43,7 +42,6 @@
   text-align: center;
 }
 
-/* Main Content Centered */
 .profile-main-content {
   flex-grow: 1;
   display: flex;
@@ -86,7 +84,6 @@
   display: block;
 }
 
-/* Name & Role */
 .profile-name-bio {
   margin-top: 1rem;
   text-align: center;
@@ -103,7 +100,6 @@
   color: #555;
 }
 
-/* Option Items */
 .option-item {
   width: 100%;
   display: flex;
@@ -135,7 +131,6 @@
   font-size: 1rem;
 }
 
-/* Sign Out Button */
 .sign-out-btn {
   width: 100%;
   margin-top: 2rem;
@@ -159,7 +154,6 @@
   transform: scale(1.02);
 }
 
-/* Edit Form */
 .edit-form {
   background: white;
   padding: 2rem;
@@ -214,7 +208,6 @@
   background-color: #0e1e30;
 }
 
-/* Mobile Responsive */
 @media (max-width: 480px) {
   .profile-picture-wrapper {
     width: 100px;
