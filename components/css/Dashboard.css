@@ -54,7 +54,7 @@ body {
    margin-top: 20px;
 }
 /* Helmet Icon */
-.helmet-status-card .helmet-icon {
+.helmet-status-card .hat-icon {
   font-size: 40px;
   margin: 10px 0;
 }
@@ -69,7 +69,10 @@ body {
   flex-direction: column;
   gap: 15px;
 }
-
+.gap-text {
+  margin-left: 20px;
+  color: #000;
+}
 .nav-button {
   background-color: white;
   border: none;
@@ -153,6 +156,4 @@ body {
   border-radius: 50%;
   z-index: 1;
   left: calc(16.66% - 30px);
-  transition: left 0.3s ease;
 }
-
