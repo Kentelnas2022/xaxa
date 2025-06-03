@@ -14,7 +14,7 @@ import './css/Dashboard.css';
 import './css/Profile.css';
 
 const supabaseUrl = 'https://saigagigwcenxuwsqoir.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // Use your actual key
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhaWdhZ2lnd2Nlbnh1d3Nxb2lyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc4MTUzNDMsImV4cCI6MjA2MzM5MTM0M30.tSycjBx7fJKFd4boZRKghKr2LU-ToWa5Z_4IUa2VHJY'; // Use your actual key
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const Profile = () => {
@@ -26,19 +26,22 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
 
-      if (sessionError || !session) {
+      if (sessionError || !session || !session.user) {
         navigate('/');
         return;
       }
 
-      const { user } = session;
+      const userId = session.user.id;
 
       const { data, error } = await supabase
         .from('users')
-        .select('full_name, username, gender, phone_number, email, avatar_url')
-        .eq('id', user.id)
+        .select('*')
+        .eq('id', userId)
         .single();
 
       if (error) {
@@ -63,34 +66,44 @@ const Profile = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    const fileExt = file.name.split('.').pop();
-    const filePath = `${Date.now()}.${fileExt}`;
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
 
+    if (sessionError || !session || !session.user) {
+      console.error('User not authenticated');
+      return;
+    }
+
+    const userId = session.user.id;
+    const fileExt = file.name.split('.').pop();
+    const filePath = `avatars/${userId}.${fileExt}`;
+
+    // Upload to Supabase Storage with upsert true (overwrite)
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(filePath, file);
+      .upload(filePath, file, { upsert: true });
 
     if (uploadError) {
       console.error('Upload error:', uploadError.message);
       return;
     }
 
-    const { data: { publicUrl } } = supabase.storage
-      .from('avatars')
-      .getPublicUrl(filePath);
+    // Get public URL with cache busting timestamp to force reload
+    const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filePath);
+    const avatarUrlWithTimestamp = `${publicUrl}?t=${new Date().getTime()}`;
 
-    const { data: { session } } = await supabase.auth.getSession();
-    const { user } = session;
-
+    // Save avatar_url in users table
     const { error: updateError } = await supabase
       .from('users')
-      .update({ avatar_url: publicUrl })
-      .eq('id', user.id);
+      .update({ avatar_url: avatarUrlWithTimestamp })
+      .eq('id', userId);
 
     if (updateError) {
       console.error('Avatar update error:', updateError.message);
     } else {
-      setUserProfile((prev) => ({ ...prev, avatar_url: publicUrl }));
+      setUserProfile((prev) => ({ ...prev, avatar_url: avatarUrlWithTimestamp }));
     }
   };
 
@@ -98,13 +111,21 @@ const Profile = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { data: { session } } = await supabase.auth.getSession();
-    const { user } = session;
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+
+    if (sessionError || !session || !session.user) {
+      console.error('User not authenticated');
+      setLoading(false);
+      return;
+    }
 
     const { error } = await supabase
       .from('users')
       .update(editProfileData)
-      .eq('id', user.id);
+      .eq('id', session.user.id);
 
     if (error) {
       console.error('Error updating profile:', error.message);
@@ -137,7 +158,7 @@ const Profile = () => {
     });
 
     return () => {
-      navItems.forEach(item => (item.onclick = null));
+      navItems.forEach((item) => (item.onclick = null));
     };
   }, [navigate]);
 
@@ -145,14 +166,19 @@ const Profile = () => {
     <div className="profile-page-container">
       <header className={`header ${mode === 'edit' ? 'edit-header' : ''}`}>
         {mode === 'edit' && (
-          <button className="back-button" onClick={() => {
-            setMode('view');
-            setEditProfileData({ ...userProfile });
-          }}>
+          <button
+            className="back-button"
+            onClick={() => {
+              setMode('view');
+              setEditProfileData({ ...userProfile });
+            }}
+          >
             <FontAwesomeIcon icon={faArrowLeft} />
           </button>
         )}
-        <h1 className="page-title">{mode === 'view' ? 'Profile' : 'Edit Profile'}</h1>
+        <h1 className="page-title">
+          Edit Profile
+        </h1>
       </header>
 
       <main className="profile-main-content">
@@ -163,6 +189,7 @@ const Profile = () => {
                 <img
                   src={userProfile.avatar_url || 'https://via.placeholder.com/160'}
                   className="profile-picture"
+                  alt="Profile"
                 />
                 <input
                   type="file"
@@ -173,7 +200,8 @@ const Profile = () => {
                 />
               </label>
               <div className="profile-name-bio">
-                <h2 className="full-name">{userProfile.full_name || 'No Name Set'}</h2>
+
+                <h2 className="full-name">{userProfile.full_name}</h2>
                 <p className="user-role">User</p>
               </div>
             </div>
@@ -182,16 +210,15 @@ const Profile = () => {
               <div className="option-item" onClick={() => setMode('edit')}>
                 <div className="option-left">
                   <FontAwesomeIcon icon={faUser} className="option-icon" />
-                  <span style={{ fontSize: '1.1rem' }}>Edit Profile</span>
+                  <span>Edit Profile</span>
                 </div>
                 <FontAwesomeIcon icon={faChevronRight} className="option-arrow" />
               </div>
 
-              {/* 🔁 Updated Settings Redirect */}
               <div className="option-item" onClick={() => navigate('/settings')}>
                 <div className="option-left">
                   <FontAwesomeIcon icon={faCog} className="option-icon" />
-                  <span style={{ fontSize: '1.1rem' }}>Settings</span>
+                  <span>Settings</span>
                 </div>
                 <FontAwesomeIcon icon={faChevronRight} className="option-arrow" />
               </div>
@@ -211,36 +238,44 @@ const Profile = () => {
                   type="text"
                   value={editProfileData.full_name || ''}
                   placeholder="Full Name"
-                  onChange={(e) => setEditProfileData({ ...editProfileData, full_name: e.target.value })}
-                />
-                <input
-                  type="text"
-                  value={editProfileData.username || ''}
-                  placeholder="Username"
-                  onChange={(e) => setEditProfileData({ ...editProfileData, username: e.target.value })}
+                  onChange={(e) =>
+                    setEditProfileData({
+                      ...editProfileData,
+                      full_name: e.target.value,
+                    })
+                  }
                 />
                 <select
                   value={editProfileData.gender || ''}
-                  onChange={(e) => setEditProfileData({ ...editProfileData, gender: e.target.value })}
+                  onChange={(e) =>
+                    setEditProfileData({
+                      ...editProfileData,
+                      gender: e.target.value,
+                    })
+                  }
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
                 </select>
-                <input
-                  type="text"
-                  value={editProfileData.phone_number || ''}
-                  placeholder="Phone Number"
-                  onChange={(e) => setEditProfileData({ ...editProfileData, phone_number: e.target.value })}
-                />
-                <input
-                  type="email"
-                  value={editProfileData.email || ''}
-                  disabled
-                />
+               <input
+  type="text"
+  value={editProfileData.phone_number || ''}
+  placeholder="Phone Number"
+  onChange={(e) =>
+    setEditProfileData({
+      ...editProfileData,
+      phone_number: e.target.value,
+    })
+  }
+/>
+
+                <input type="email" value={editProfileData.email || ''} disabled />
                 <div className="modal-actions">
-                  <button type="button" onClick={() => setMode('view')}>Cancel</button>
+                  <button type="button" onClick={() => setMode('view')}>
+                    Cancel
+                  </button>
                   <button type="submit">Save</button>
                 </div>
               </form>
