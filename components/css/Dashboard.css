@@ -12,16 +12,13 @@ body {
   color: #1A2A4D;
 }
 
-/* Main Content */
 .main-content {
   position: relative;
   z-index: 10;
-  margin-top: -10px; /* pull it upwards to overlap */
+  margin-top: -10px;
   padding: 0 20px 20px;
 }
 
-
-/* Helmet Status Card */
 .helmet-status-card {
   background-color: white;
   border-radius: 15px;
@@ -32,7 +29,7 @@ body {
   width: 100%;
   margin-top: -50px;
   position: relative;
-  z-index: 3; /* Ensure it's on top of the header */
+  z-index: 3;
 }
 
 .header-status-card {
@@ -43,17 +40,16 @@ body {
   text-align: center;
   position: relative;
   z-index: 1;
-  padding-bottom: 60px; /* optional: adds more space for visual depth */
-}
-.header-status-card {
+  padding-bottom: 60px;
   padding-top: 40px;
   font-size: 1.8rem;
 }
+
 .text-section {
   color: white;
-   margin-top: 20px;
+  margin-top: 20px;
 }
-/* Helmet Icon */
+
 .helmet-status-card .hat-icon {
   font-size: 40px;
   margin: 10px 0;
@@ -61,18 +57,21 @@ body {
 
 .status-text {
   color: gray;
+  text-align: center;
+  margin-left: 7px;
 }
 
-/* Buttons */
 .button-card {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
+
 .gap-text {
   margin-left: 20px;
   color: #000;
 }
+
 .nav-button {
   background-color: white;
   border: none;
@@ -101,7 +100,6 @@ body {
   transform: scale(1.02);
 }
 
-/* Bottom Navigation */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -156,4 +154,196 @@ body {
   border-radius: 50%;
   z-index: 1;
   left: calc(16.66% - 30px);
+}
+
+.history-log-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 30px 20px 80px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.history-card {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(26, 42, 77, 0.1);
+  padding: 18px 24px;
+  display: grid;
+  grid-template-columns: 1.8fr 3fr 3fr 0.6fr;
+  align-items: center;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  cursor: default;
+  color: #1A2A4D;
+  position: relative;
+}
+
+.history-card:hover {
+  box-shadow: 0 12px 28px rgba(26, 42, 77, 0.15);
+  transform: translateY(-4px);
+}
+
+.history-date {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #334a87;
+}
+
+.history-incident {
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: capitalize;
+}
+
+.history-location {
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #6b7aaf;
+  text-align: right;
+}
+
+.history-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 8px;
+  border-radius: 12px;
+}
+
+.history-warning::before {
+  background: #f0ad4e;
+}
+
+.history-critical::before {
+  background: #d9534f;
+}
+
+.history-info::before {
+  background: #5bc0de;
+}
+
+.history-warning .history-incident::after {
+  content: "\f071";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #f0ad4e;
+  margin-left: 8px;
+  font-size: 1.1rem;
+}
+
+.history-critical .history-incident::after {
+  content: "\f06a";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #d9534f;
+  margin-left: 8px;
+  font-size: 1.1rem;
+}
+
+.history-info .history-incident::after {
+  content: "\f05a";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #5bc0de;
+  margin-left: 8px;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 600px) {
+  .history-card {
+    grid-template-columns: 1.5fr 3fr 2fr;
+    grid-template-rows: auto auto;
+    padding: 16px 18px;
+    gap: 6px;
+  }
+
+  .history-location {
+    grid-column: 1 / 4;
+    text-align: left;
+    font-size: 0.85rem;
+    color: #8890b0;
+  }
+}
+
+.crash-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(229, 62, 62, 0.1);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.crash-pulse {
+  width: 180px;
+  height: 180px;
+  background-color: rgba(229, 62, 62, 0.4);
+  border-radius: 50%;
+  animation: crashPulse 1.5s infinite ease-out;
+  position: absolute;
+  z-index: 0;
+}
+
+@keyframes crashPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.crash-message-box {
+  z-index: 1;
+  background-color: white;
+  color: #1A2A4D;
+  padding: 25px 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  width: 280px;
+}
+
+.crash-message-box h2 {
+  font-size: 1.5rem;
+  color: #e53e3e;
+  margin-bottom: 10px;
+}
+
+.crash-message-box p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.crash-timer {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.cancel-alert-button {
+  background-color: crimson;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.cancel-alert-button:hover {
+  background-color: #c12727;
 }
