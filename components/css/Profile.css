@@ -34,6 +34,7 @@
   font-size: 1.5rem;
   margin-right: 1rem;
   cursor: pointer;
+  position: fixed;
 }
 
 .page-title {
