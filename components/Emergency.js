@@ -6,28 +6,24 @@ const Emergency = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const navItems = document.querySelectorAll('.nav-item');
-    const highlight = document.querySelector('.nav-highlight');
-
-    // Activate the "Call" (index 1) nav item on load
-    navItems.forEach((item, index) => {
-      item.classList.remove('active');
-      if (index === 1) {
-        item.classList.add('active');
-        if (highlight) {
-          highlight.style.left = `calc(${index * 33.33}% + 16.66% - 30px)`; // Adjust based on nav width
-        }
-      }
-    });
-
-    // Handle navigation
-    navItems.forEach((item, index) => {
-      item.onclick = () => {
-        if (index === 0) navigate('/dashboard');
-        else if (index === 1) navigate('/emergency');
-        else if (index === 2) navigate('/profile');
-      };
-    });
+        const navItems = document.querySelectorAll('.nav-item');
+        const highlight = document.querySelector('.nav-highlight');
+    
+        navItems.forEach((item, index) => {
+          item.classList.remove('active');
+          if (index === 1) {
+            item.classList.add('active');
+            if (highlight) {
+              highlight.style.left = `calc(${index * 33.33}% + 16.66% - 30px)`;
+            }
+          }
+    
+          item.onclick = () => {
+            if (index === 0) navigate('/dashboard');
+            else if (index === 1) navigate('/emergency');
+            else if (index === 2) navigate('/profile');
+          };
+        });
 
     return () => {
       navItems.forEach(item => item.onclick = null);
