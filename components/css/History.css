@@ -1,0 +1,120 @@
+/* Header Styles */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap');
+.header {
+  background-color: #1f324a;
+  color: white;
+  padding: 1rem 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  position: absolute;
+  margin-right: 150px;
+  margin-top: -4px;
+}
+
+
+.back-button:hover {
+  color: #cccccc;
+}
+
+.header h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.5rem;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.main-content {
+  background-color: #f8f9fa;
+  padding: 30px 20px;
+  min-height: calc(100vh - 64px);
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+  color: #1f324a;
+}
+
+.history-log-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 60px; 
+}
+
+.history-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 8px 20px rgba(31, 50, 74, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-left: 6px solid #1f324a;
+  font-family: 'Montserrat', sans-serif;
+  color: #1f324a;
+}
+
+.history-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(31, 50, 74, 0.15);
+}
+
+.history-date {
+  font-size: 0.9rem;
+  color: black;
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.history-incident {
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  color: #1f324a;
+}
+
+.history-location {
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  font-family: 'Montserrat', sans-serif;
+  color: black;
+}
+
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 20px 10px;
+  }
+
+  .history-card {
+    padding: 16px;
+    gap: 8px;
+  }
+
+  .history-header {
+    font-size: 1.05rem;
+  }
+
+  .history-location {
+    font-size: 0.95rem;
+  }
+}

@@ -1,0 +1,60 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: sans-serif;
+  text-align: center;
+  color: #0f1c2e;
+}
+
+.loading-container p {
+  font-weight: bold;
+  color: #1f324a;
+}
+
+
+.dot-loader {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: white;
+  border: 2px solid black;
+  opacity: 0.3;
+  animation: dotPulse 1s infinite;
+}
+
+.dot1 {
+  animation-delay: 0s;
+}
+.dot2 {
+  animation-delay: 0.2s;
+}
+.dot3 {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+  0% {
+    opacity: 0.3;
+    background-color: white;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    background-color: #1f324a;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0.3;
+    background-color: white;
+    transform: scale(1);
+  }
+}
