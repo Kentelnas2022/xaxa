@@ -6,27 +6,36 @@
 }
 
 .settings-header {
-  text-align: center;
-  align-items: center;
   background-color: #1f324a;
   color: white;
   padding: 1rem;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-.settings-title {
-    position: fixed;
-    margin-top: -50px;
-    left: 130px;
-}
+
 .back-button {
   background: none;
-  display: flex;
   border: none;
   color: white;
   font-size: 1.5rem;
   margin-right: 1rem;
   cursor: pointer;
+  position: fixed;
+  right:  150px;
+  top: 5px; 
 }
 
+.settings-title {
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  user-select: none;
+}
 .settings-container {
   padding: 1.1rem;
   display: flex;
@@ -70,7 +79,6 @@
 }
 
 
-/* Toggle switch style */
 .switch {
   position: relative;
   display: inline-block;
