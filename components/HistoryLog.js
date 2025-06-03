@@ -1,76 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './css/Dashboard.css';
+import { FaArrowLeft } from 'react-icons/fa';
+import './css/History.css';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [helmetImage, setHelmetImage] = useState(null);
 
   useEffect(() => {
-    // Fetch image from localStorage (adjust key as needed)
     const imageData = localStorage.getItem('helmetImage');
     if (imageData) {
       setHelmetImage(imageData);
     }
-
-    const navItems = document.querySelectorAll('.nav-item');
-    const highlight = document.querySelector('.nav-highlight');
-
-    navItems.forEach((item, index) => {
-      item.classList.remove('active');
-      if (index === 0) {
-        item.classList.add('active');
-        if (highlight) {
-          highlight.style.left = `calc(${index * 33.33}% + 16.66% - 30px)`;
-        }
-      }
-
-      item.onclick = () => {
-        if (index === 0) navigate('/dashboard');
-        else if (index === 1) navigate('/emergency');
-        else if (index === 2) navigate('/profile');
-      };
-    });
-
-    return () => {
-      navItems.forEach((item, index) => {
-        item.removeEventListener('click', () => {
-          if (index === 1) navigate('/emergency');
-          else if (index === 2) navigate('/profile');
-        });
-      });
-    };
-  }, [navigate]);
+  }, []);
 
   return (
     <div>
-      <div className="header-status-card">
-        <h2 className='text-section'>History Log</h2>
-      </div>
+      <header className="header edit-header">
+  <button className="back-button" onClick={() => navigate(-1)}>
+    <FaArrowLeft />
+  </button>
+  <h2>History Log</h2>
+</header>
 
       <main className="main-content">
-        <div className="helmet-status-card">
-          <h3 className='gap-text'>Date<span className='gap-text'> Indicent</span><span  className='gap-text'> Location</span></h3>
-         
+        <div className="history-log-container">
+          <div className="history-card history-critical">
+            <div className="history-date">2025-06-04 15:20</div>
+            <div className="history-incident">Accident detected</div>
+            <div className="history-location">Downtown Intersection</div>
+          </div>
+          <div className="history-card history-warning">
+            <div className="history-date">2025-06-03 10:12</div>
+            <div className="history-incident">Helmet dropped</div>
+            <div className="history-location">Main Street</div>
+          </div>
+          <div className="history-card history-info">
+            <div className="history-date">2025-06-01 08:45</div>
+            <div className="history-incident">Helmet connected</div>
+            <div className="history-location">Home</div>
+          </div>
         </div>
-
-       
       </main>
-
-      <nav className="bottom-nav" id="bottomNav">
-        <ul className="nav-list">
-          <li className="nav-item active">
-            <i className="fas fa-home"></i>
-          </li>
-          <li className="nav-item">
-            <i className="fas fa-phone"></i>
-          </li>
-          <li className="nav-item">
-            <i className="fas fa-user"></i>
-          </li>
-          <div className="nav-highlight"></div>
-        </ul>
-      </nav>
     </div>
   );
 };
