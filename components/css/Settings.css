@@ -12,7 +12,11 @@
   color: white;
   padding: 1rem;
 }
-
+.settings-title {
+    position: fixed;
+    margin-top: -50px;
+    left: 130px;
+}
 .back-button {
   background: none;
   display: flex;
