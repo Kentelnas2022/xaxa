@@ -14,7 +14,8 @@ import './css/Dashboard.css';
 import './css/Profile.css';
 
 const supabaseUrl = 'https://saigagigwcenxuwsqoir.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhaWdhZ2lnd2Nlbnh1d3Nxb2lyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc4MTUzNDMsImV4cCI6MjA2MzM5MTM0M30.tSycjBx7fJKFd4boZRKghKr2LU-ToWa5Z_4IUa2VHJY'; // Use your actual key
+const supabaseAnonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhaWdhZ2lnd2Nlbnh1d3Nxb2lyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc4MTUzNDMsImV4cCI6MjA2MzM5MTM0M30.tSycjBx7fJKFd4boZRKghKr2LU-ToWa5Z_4IUa2VHJY';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const Profile = () => {
@@ -91,7 +92,9 @@ const Profile = () => {
     }
 
     // Get public URL with cache busting timestamp to force reload
-    const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filePath);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('avatars').getPublicUrl(filePath);
     const avatarUrlWithTimestamp = `${publicUrl}?t=${new Date().getTime()}`;
 
     // Save avatar_url in users table
@@ -172,20 +175,19 @@ const Profile = () => {
               setMode('view');
               setEditProfileData({ ...userProfile });
             }}
+            aria-label="Back"
           >
             <FontAwesomeIcon icon={faArrowLeft} />
           </button>
         )}
-        <h1 className="page-title">
-          Edit Profile
-        </h1>
+        <h1 className="page-title">{mode === 'edit' ? 'Edit Profile' : 'Profile'}</h1>
       </header>
 
       <main className="profile-main-content">
         {mode === 'view' ? (
           <>
             <div className="profile-picture-section">
-              <label htmlFor="avatar-upload" className="profile-picture-wrapper">
+              <label htmlFor="avatar-upload" className="profile-picture-wrapper" aria-label="Upload Profile Picture">
                 <img
                   src={userProfile.avatar_url || 'https://via.placeholder.com/160'}
                   className="profile-picture"
@@ -200,9 +202,8 @@ const Profile = () => {
                 />
               </label>
               <div className="profile-name-bio">
-
                 <h2 className="full-name">{userProfile.full_name}</h2>
-                <p className="user-role">User</p>
+                <p className="user-role"></p>
               </div>
             </div>
 
@@ -230,10 +231,10 @@ const Profile = () => {
             </button>
           </>
         ) : (
-          <div className="modal-overlay">
+          <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="editProfileHeading">
             <div className="modal">
-              <h2>Edit Profile</h2>
-              <form onSubmit={handleSaveProfile}>
+              <h2 id="editProfileHeading">Edit Profile</h2>
+              <form onSubmit={handleSaveProfile} className="edit-profile-form" noValidate>
                 <input
                   type="text"
                   value={editProfileData.full_name || ''}
@@ -244,39 +245,42 @@ const Profile = () => {
                       full_name: e.target.value,
                     })
                   }
+                  required
+                  aria-label="Full Name"
                 />
-                <select
-                  value={editProfileData.gender || ''}
+
+                <input
+                  type="text"
+                  value={editProfileData.phone_number || ''}
+                  placeholder="Phone Number"
                   onChange={(e) =>
                     setEditProfileData({
                       ...editProfileData,
-                      gender: e.target.value,
+                      phone_number: e.target.value,
                     })
                   }
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-               <input
-  type="text"
-  value={editProfileData.phone_number || ''}
-  placeholder="Phone Number"
-  onChange={(e) =>
-    setEditProfileData({
-      ...editProfileData,
-      phone_number: e.target.value,
-    })
-  }
-/>
+                  aria-label="Phone Number"
+                />
 
-                <input type="email" value={editProfileData.email || ''} disabled />
+                <input
+                  type="email"
+                  value={editProfileData.email || ''}
+                  disabled
+                  aria-label="Email"
+                  className="disabled-input"
+                />
+
                 <div className="modal-actions">
-                  <button type="button" onClick={() => setMode('view')}>
+                  <button
+                    type="button"
+                    className="btn cancel-btn"
+                    onClick={() => setMode('view')}
+                  >
                     Cancel
                   </button>
-                  <button type="submit">Save</button>
+                  <button type="submit" className="btn save-btn" disabled={loading}>
+                    {loading ? 'Saving...' : 'Save'}
+                  </button>
                 </div>
               </form>
             </div>
